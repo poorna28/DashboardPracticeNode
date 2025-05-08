@@ -281,6 +281,7 @@ app.post('/signup', (req, res) => {
     console.log('SIGINT received. Shutting down gracefully');
     server.close(() => {
       pool.end(() => {
+        console.log("gitaccess")
         console.log('Database pool closed');
         process.exit(0);
       });
