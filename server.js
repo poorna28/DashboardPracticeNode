@@ -214,45 +214,7 @@ app.post('/signup', (req, res) => {
     });
   });
 });
-// Change the PORT variable
 
-// Add logging to the /signup route
-// app.post('/signup', (req, res) => {
-//   console.log("Signup request body:", req.body); // Log the request body
-//   const { name, email, password, mobile_number } = req.body;
-
-//   if (!name || !email || !password || !mobile_number) {
-//     return res.status(400).json({ success: false, message: 'All fields are required' });
-//   }
-
-//   // Check if the email already exists
-//   const checkEmailQuery = 'SELECT * FROM users WHERE email = ?';
-//   pool.query(checkEmailQuery, [email], (checkErr, checkResults) => {
-//     if (checkErr) {
-//       console.error("Email check error:", checkErr);
-//       return res.status(500).json({ success: false, message: 'Database error during email check' });
-//     }
-
-//     if (checkResults.length > 0) {
-//       return res.status(409).json({ success: false, message: 'Email already registered' });
-//     }
-
-//     // Insert new user with password
-//     const insertQuery = 'INSERT INTO users (name, email, password, mobile_number) VALUES (?, ?, ?, ?)';
-//     pool.query(insertQuery, [name, email, password, mobile_number], (insertErr, result) => {
-//       if (insertErr) {
-//         console.error("Signup insert error:", insertErr);
-//         return res.status(500).json({ success: false, message: 'Error registering user' });
-//       }
-
-//       res.status(201).json({ 
-//         success: true, 
-//         message: 'User registered successfully', 
-//         userId: result.insertId 
-//       });
-//     });
-//   });
-// });
 
 
   // Health check endpoint
