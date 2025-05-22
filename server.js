@@ -15,9 +15,9 @@ app.use(express.json()); // 👈 necessary to parse JSON bodies
 
 // MySQL configuration
 const dbConfig = {
-  host: '54.89.138.185',
+  host: '20.64.249.116',
   user: 'charan',
-  password: 'charan123', // Add your MySQL password if set
+  password: 'charan', // Add your MySQL password if set
   database: 'user_management'
 };
 
@@ -215,6 +215,85 @@ app.post('/signup', (req, res) => {
   });
 });
 
+// Get all students
+app.get('/students', (req, res) => {
+  const query = 'SELECT * FROM students';
+
+  pool.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error fetching students', error: err.message });
+    }
+    res.status(200).json(results);
+  });
+});
+
+// Add a new student
+app.post('/students', (req, res) => {
+  const { name, email, mobile_number } = req.body;
+
+  // Check required fields (do NOT include id here)
+  if (!name || !email || !mobile_number) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  // Insert query without id (assuming id is auto-increment primary key)
+  const query = 'INSERT INTO students (name, email, mobile_number) VALUES (?, ?, ?)';
+
+  pool.query(query, [name, email, mobile_number], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error adding student', error: err.message });
+    }
+    res.status(201).json({ 
+      message: 'Student added successfully', 
+      studentId: result.insertId 
+    });
+  });
+});
+
+// Update a student
+app.put('/students/:id', (req, res) => {
+  const studentId = req.params.id;
+  const { name, email, mobile_number } = req.body;
+
+  if (!name || !email || !mobile_number) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  const query = 'UPDATE students SET name = ?, email = ?, mobile_number = ? WHERE id = ?';
+
+  pool.query(query, [name, email, mobile_number, studentId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error updating student', error: err.message });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(200).json({ message: 'Student updated successfully' });
+  });
+});
+
+// Delete a student
+app.delete('/students/:id', (req, res) => {
+  const studentId = req.params.id;
+  const query = 'DELETE FROM students WHERE id = ?';
+
+  pool.query(query, [studentId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error deleting student', error: err.message });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(200).json({ message: 'Student deleted successfully' });
+  });
+});
+
+
+
 
 
   // Health check endpoint
@@ -225,7 +304,7 @@ app.post('/signup', (req, res) => {
   // Start the server
   const PORT = process.env.PORT || 3034;
   const server = app.listen(PORT, () => {
-    console.log(`Server running on http://54.89.138.185:${PORT}`);
+    console.log(`Server running on http://20.64.249.116:${PORT}`);
   });
 
   // Handle graceful shutdown
