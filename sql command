@@ -14,3 +14,7 @@ CREATE TABLE students (
   mobile_number VARCHAR(20),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO users (name, email, mobile_number, password)
+VALUES ('John Doe', 'john@example.com', '1234567890', 'securePassword123');
+

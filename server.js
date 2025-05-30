@@ -15,9 +15,9 @@ app.use(express.json()); // 👈 necessary to parse JSON bodies
 
 // MySQL configuration
 const dbConfig = {
-  host: '20.64.249.116',
+  host: '20.51.105.250',
   user: 'charan',
-  password: 'charan', // Add your MySQL password if set
+  password: 'caran', // Add your MySQL password if set
   database: 'user_management'
 };
 
@@ -227,6 +227,25 @@ app.get('/students', (req, res) => {
     res.status(200).json(results);
   });
 });
+// ...existing code...
+
+// Get a single student by ID
+app.get('/students/:id', (req, res) => {
+  const studentId = req.params.id;
+  const query = 'SELECT * FROM students WHERE id = ?';
+  pool.query(query, [studentId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error fetching student', error: err.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(200).json(results);
+  });
+});
+
+// ...existing code...
 
 // Add a new student
 app.post('/students', (req, res) => {
@@ -304,7 +323,7 @@ app.delete('/students/:id', (req, res) => {
   // Start the server
   const PORT = process.env.PORT || 3034;
   const server = app.listen(PORT, () => {
-    console.log(`Server running on http://20.64.249.116:${PORT}`);
+    console.log(`Server running on http://20.51.105.250:${PORT}`);
   });
 
   // Handle graceful shutdown
